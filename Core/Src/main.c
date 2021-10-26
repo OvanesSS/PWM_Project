@@ -107,9 +107,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  HAL_UART_Receive_IT(&huart1, buff, 6);
-	  if(buff[0] == '0') {// если первый элемент buff 0 то включается автоматический режим
-		  for(i=1; i<=20000; i++)// увеличение яркости
+	HAL_UART_Receive_IT(&huart1, buff, 6);
+	if(buff[0] == '0') 	// если первый элемент buff 0 то включается автоматический режим
+	{
+		for(i=1; i<=20000; i++)// увеличение яркости
 		  {
 			  TIM1->CCR1 = i;
 			  for(j=0; j<100; j++) __NOP();
@@ -122,16 +123,16 @@ int main(void)
 		  }
 		  HAL_Delay(500);
 		  HAL_UART_Transmit_IT(&huart1, buff, 6);
-	  }
-	  else if(buff[0] == '1')// если перый элемент buff 1 то яркость настраивается вручную
-	  {
+	 }
+	 else if(buff[0] == '1')// если перый элемент buff 1 то яркость настраивается вручную
+	 {
 		uint16_t x = 0;
 		x = ((buff[1] - '0') * 10000) + ((buff[2] - '0') * 1000) + ((buff[3] - '0')*100)+((buff[4] - '0')*10)+(buff[5] - '0');//считывание из buff значения яркости
 		TIM1->CCR1 = x;
 		for(j=0; j<100; j++) __NOP();
 		HAL_UART_Transmit_IT(&huart1, buff, 6);
 		HAL_Delay(1000);
-	  }
+	 }
 
 
 
